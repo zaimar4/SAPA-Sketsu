@@ -40,11 +40,13 @@ class ComplaintController extends Controller
             'evidence_photo' => 'nullable|image|max:2048',
             'category' => 'required|in:bullying,facilities,suggestion',
         ]);
-        $pothopath=null;
+       $filename = null; 
+
         if($request->hasFile('evidence_photo')){
             $file = $request->file('evidence_photo');
-            $filename = time().'_'.$file->extension();
-            $pothopath = $file->storeAs('public/images', $filename);
+            $filename = time() . '.' . $file->extension();
+            
+            $file->move(public_path('images'), $filename);
         }
         $initials=[
             'bullying' => 'BLY',
@@ -59,7 +61,7 @@ class ComplaintController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'evidence_photo' => $pothopath,
+            'evidence_photo' => $filename,
             'is_anonymous' => $request->has('is_anonymous'),
             'status' => 'pending',
             'ticket_number' => $ticketNumber,
@@ -68,10 +70,11 @@ class ComplaintController extends Controller
         return redirect()->route('user.dashboard')->with('success', 'Complaint submitted successfully.');
     }
 
-    public function show(Complaint $complaint)
+    public function show($slug)
     {
-        $complaints= Auth::user()->Complaints()->latest()->get();
-        return view('user.complaints', compact('complaints'));
+       $complaint = Auth::user()->complaints()->where('slug', $slug)->firstOrFail();
+
+          return view('user.detail-complaint', compact('complaint'));
     }
 public function showAll(Request $request)
 {
@@ -119,8 +122,11 @@ public function showAll(Request $request)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Complaint $complaint)
+    public function destroy($id)
     {
-        //
+        $complaint = Complaint::findOrFail($id);
+        $complaint->delete();
+        return redirect()->back()->with('success', 'Complaint deleted successfully.');
+
     }
 }

@@ -14,6 +14,7 @@ class Complaint extends Model
         'slug',
         'category',
         'ticket_number',
+        'evidence_photo',
         'is_anonymous',
         'description',
         'status',

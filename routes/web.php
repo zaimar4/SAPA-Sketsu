@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ComplaintController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 
@@ -35,6 +35,7 @@ Route::prefix('user')->middleware(['auth', 'role:user'])->group(function () {
     Route::post('/reports', [ComplaintController::class, 'store'])->name('user.reports');
     Route::get('/reports/all', [ComplaintController::class, 'showAll'])->name('user.reports-all');
     Route::get('/laporan/{complaint:slug}', [ComplaintController::class, 'show'])->name('user.complaints-show');
+    Route::delete('/laporan/{id}', [ComplaintController::class, 'destroy'])->name('user.complaints-destroy');
 });
 
 Route::middleware('auth')->group(function () {
