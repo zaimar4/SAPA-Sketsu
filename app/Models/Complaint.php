@@ -13,7 +13,7 @@ class Complaint extends Model
         'title',
         'slug',
         'category',
-        'ticket',
+        'ticket_number',
         'is_anonymous',
         'description',
         'status',

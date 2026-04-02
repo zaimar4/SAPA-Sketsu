@@ -21,9 +21,10 @@ class ComplaintController extends Controller
     ];
         $complaints= Auth::user()->Complaints()->latest()->paginate(3);
         $total = Auth::user()->Complaints()->count();
+        $totalPending = Auth::user()->Complaints()->where('status', 'pending')->count();
         $totalprocess = Auth::user()->Complaints()->where('status', 'process')->count();
         $totalresolved = Auth::user()->Complaints()->where('status', 'resolved')->count();
-        return view('user.user', compact('complaints','categories','total','totalprocess','totalresolved'));
+        return view('user.user', compact('complaints','categories','total','totalprocess','totalresolved','totalPending'));
     }
     
 
@@ -72,17 +73,36 @@ class ComplaintController extends Controller
         $complaints= Auth::user()->Complaints()->latest()->get();
         return view('user.complaints', compact('complaints'));
     }
+public function showAll(Request $request)
+{
+    $query = Auth::user()->complaints()->latest();
 
-    public function showAll()
-    {
-        
-        $complaints= Auth::user()->Complaints()->latest()->get();
-        return view('user.complaints', compact('complaints'));
+  
+    if ($request->has('search') && $request->search != '') {
+        $searchTerm = $request->search;
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('title', 'like', '%' . $searchTerm . '%')
+              ->orWhere('description', 'like', '%' . $searchTerm . '%')
+              ->orWhere('ticket_number', 'like', '%' . $searchTerm . '%');
+        });
     }
+
     
-    /**
-     * Show the form for editing the specified resource.
-     */
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+    if ($request->filled('category')) {
+        $query->where('category', $request->category);
+    }
+
+    $complaints = $query->paginate(10)->withQueryString(); 
+    $total = $query->count();
+    $categories = ['bullying' => 'Bullying', 'facilities' => 'Fasilitas', 'suggestion' => 'Saran'];
+
+    return view('user.complaints', compact('complaints', 'total', 'categories'));
+}
+    
+  
     public function edit(Complaint $complaint)
     {
         

@@ -13,7 +13,7 @@
             <span class="font-medium">Dashboard</span>
         </a>
         <a href="{{ route('user.reports-all') }}" class="flex items-center px-3 py-2 text-slate-300 hover:bg-indigo-600 hover:text-white rounded-lg transition-all duration-200 group">
-            <i class="fa-solid fa-house w-5 h-5 mr-3 text-slate-400 group-hover:text-white"></i>
+            <i class="fa-solid fa-file-text w-5 h-5 mr-3 text-slate-400 group-hover:text-white"></i>
             <span class="font-medium">Laporan Saya</span>
         </a>
 
