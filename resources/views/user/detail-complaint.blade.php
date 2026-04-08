@@ -123,12 +123,40 @@
                 </div>
             </div>
 
-            <!-- Tanggapan Card -->
-            <div class="bg-white rounded-2xl sm:rounded-xl shadow-gray-500/20 p-3 sm:px-3 sm:py-5">
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <i class="fa-regular fa-message text-lg"></i>
-                    <p class="text-sm font-medium text-slate-700">Tanggapan</p>
+         <div class="bg-white rounded-2xl sm:rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5">
+     {{-- Diskusi Laporan (Gaya Bubble Chat) --}}
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-indigo-500"></i> Diskusi Laporan
+                </h3>
+
+                <div class="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    @forelse($complaint->responses as $res)
+                        <div class="space-y-2">
+                            <div class="inline-block px-4 py-2.5 rounded-2xl text-xs font-bold shadow-sm 
+                                {{ $res->user?->role !== 'user' ? 'bg-slate-100 text-slate-700' : 'bg-indigo-600 text-white' }}">
+                                {{ $res->massage }}
+                            </div>
+                            <p class="text-[8px] font-black text-slate-400 uppercase tracking-wider pl-1">
+                                {{ $res->user?->name }} • {{ $res->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                    @empty
+                        <div class="text-center py-4">
+                            <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Belum ada tanggapan</p>
+                        </div>
+                    @endforelse
                 </div>
+
+                {{-- Form Kirim Pesan (Hanya Admin/Guru di gambar ini, tapi disesuaikan) --}}
+                <form action="{{ route('responses.store') }}" method="POST" class="mt-6 pt-6 border-t border-slate-100">
+                    @csrf
+                    <input type="hidden" name="complaint_id" value="{{ $complaint->id }}">
+                    <textarea name="massage" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-medium focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="Tulis tanggapan..."></textarea>
+                    <button class="w-full mt-3 bg-slate-900 text-white font-black py-3 rounded-xl text-[10px] uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all">
+                        Kirim Tanggapan
+                    </button>
+                </form>
             </div>
         </div>
     </div>

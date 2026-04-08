@@ -96,7 +96,7 @@
 
         {{-- Stats Cards --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center gap-4">
                 <div class="bg-indigo-50 text-indigo-600 w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-lg">
                     <i class="fa-regular fa-file-lines"></i>
                 </div>
@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center gap-4">
                 <div class="bg-amber-50 text-amber-500 w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-lg">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                 </div>
@@ -116,7 +116,7 @@
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center gap-4">
                 <div class="bg-blue-50 text-blue-600 w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-lg">
                     <i class="fa-solid fa-spinner fa-spin-pulse"></i>
                 </div>
@@ -126,7 +126,7 @@
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+            <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center gap-4">
                 <div class="bg-emerald-50 text-emerald-600 w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-lg">
                     <i class="fa-solid fa-check-double"></i>
                 </div>

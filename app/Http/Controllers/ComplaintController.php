@@ -6,32 +6,90 @@ use App\Models\Complaint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+use App\Exports\ComplaintsExport;
 
 class ComplaintController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        $user = Auth::user();
         $categories = [
-        'bullying' => 'Perundungan',
-        'facilities' => 'Fasilitas',
-        'suggestion' => 'Saran'
-    ];
-        $complaints= Auth::user()->Complaints()->latest()->paginate(3);
-        $total = Auth::user()->Complaints()->count();
-        $totalPending = Auth::user()->Complaints()->where('status', 'pending')->count();
-        $totalprocess = Auth::user()->Complaints()->where('status', 'process')->count();
-        $totalresolved = Auth::user()->Complaints()->where('status', 'resolved')->count();
-        return view('user.user', compact('complaints','categories','total','totalprocess','totalresolved','totalPending'));
+            'bullying' => 'Perundungan',
+            'facilities' => 'Fasilitas',
+            'suggestion' => 'Saran'
+        ];
+
+        
+        $query = ($user->role === 'admin') 
+            ? Complaint::query() 
+            : $user->complaints();
+
+        $complaints = $query->orderBy('created_at', 'desc')->paginate(5);
+        
+        $total = $query->count();
+        $totalPending = (clone $query)->where('status', 'pending')->count();
+        $totalprocess = (clone $query)->where('status', 'process')->count();
+        $totalresolved = (clone $query)->where('status', 'resolved')->count();
+
+        
+        $view = ($user->role === 'admin') ? 'admin.dashboardadmin' : 'user.user';
+        
+        return view($view, compact('complaints', 'categories', 'total', 'totalprocess', 'totalresolved', 'totalPending'));
     }
-    
 
+    public function showAll(Request $request)
+    {
+        $user = Auth::user();
+        
+       
+        $query = ($user->role === 'admin') 
+            ? Complaint::with('user') 
+            : $user->complaints();
 
-    /**
-     * Store a newly created resource in storage.
-     */
+        $query->latest();
+
+       
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('ticket_number', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        $complaints = $query->paginate(10)->withQueryString();
+        $total = $complaints->total();
+        $categories = ['bullying' => 'Bullying', 'facilities' => 'Fasilitas', 'suggestion' => 'Saran'];
+
+        $view = ($user->role === 'admin') ? 'admin.adminreports' : 'user.complaints';
+
+        return view($view, compact('complaints', 'total', 'categories'));
+    }
+
+    public function show($slug)
+    {
+        $user = Auth::user();
+        
+        $complaint = ($user->role === 'admin')
+            ? Complaint::where('slug', $slug)->firstOrFail()
+            : $user->complaints()->where('slug', $slug)->firstOrFail();
+
+        $view = ($user->role === 'admin') ? 'admin.detail-report' : 'user.detail-complaint';
+        
+        return view($view, compact('complaint'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -40,19 +98,20 @@ class ComplaintController extends Controller
             'evidence_photo' => 'nullable|image|max:2048',
             'category' => 'required|in:bullying,facilities,suggestion',
         ]);
-       $filename = null; 
 
+        $filename = null;
         if($request->hasFile('evidence_photo')){
             $file = $request->file('evidence_photo');
             $filename = time() . '.' . $file->extension();
-            
             $file->move(public_path('images'), $filename);
         }
-        $initials=[
+
+        $initials = [
             'bullying' => 'BLY',
             'facilities' => 'FCL',
             'suggestion' => 'SGS'
         ];
+        
         $prefix = $initials[$request->category] ?? 'LPR';
         $ticketNumber = $prefix . '-' . strtoupper(Str::random(8));
 
@@ -67,66 +126,80 @@ class ComplaintController extends Controller
             'ticket_number' => $ticketNumber,
             'slug' => Str::slug($request->title).'-'.Str::random(5),
         ]);
-        return redirect()->route('user.dashboard')->with('success', 'Complaint submitted successfully.');
-    }
 
-    public function show($slug)
-    {
-       $complaint = Auth::user()->complaints()->where('slug', $slug)->firstOrFail();
-
-          return view('user.detail-complaint', compact('complaint'));
+        return redirect()->route('dashboard')->with('success', 'Complaint submitted successfully.');
     }
-public function showAll(Request $request)
+    public function update(Request $request, $id) 
 {
-    $query = Auth::user()->complaints()->latest();
+    $request->validate([
+        'status' => 'required|in:pending,process,resolved,rejected',
+    ]);
 
-  
-    if ($request->has('search') && $request->search != '') {
-        $searchTerm = $request->search;
-        $query->where(function($q) use ($searchTerm) {
-            $q->where('title', 'like', '%' . $searchTerm . '%')
-              ->orWhere('description', 'like', '%' . $searchTerm . '%')
-              ->orWhere('ticket_number', 'like', '%' . $searchTerm . '%');
-        });
-    }
+    $complaint = Complaint::findOrFail($id);
+    $complaint->update([
+        'status' => $request->status,
+    ]);
 
-    
-    if ($request->filled('status')) {
-        $query->where('status', $request->status);
-    }
-    if ($request->filled('category')) {
-        $query->where('category', $request->category);
-    }
-
-    $complaints = $query->paginate(10)->withQueryString(); 
-    $total = $query->count();
-    $categories = ['bullying' => 'Bullying', 'facilities' => 'Fasilitas', 'suggestion' => 'Saran'];
-
-    return view('user.complaints', compact('complaints', 'total', 'categories'));
+    return back()->with('success', 'Status berhasil diperbarui!');
 }
-    
-  
-    public function edit(Complaint $complaint)
-    {
-        
+
+  public function quickUpdateStatus(Request $request) 
+{
+    $complaint = Complaint::findOrFail($request->complaint_id);
+    $currentStatus = $complaint->status;
+    $nextStatus = $currentStatus;
+
+    if ($currentStatus === 'pending') {
+        $nextStatus = 'process';
+    } elseif ($currentStatus === 'process') {
+        $nextStatus = 'resolved';
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Complaint $complaint)
-    {
-        //
-    }
+    $complaint->update([
+        'status' => $nextStatus,
+    ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    return back()->with('success', 'Status berhasil diperbarui ke ' . $nextStatus);
+}
+
     public function destroy($id)
     {
+        $user = Auth::user();
+        
         $complaint = Complaint::findOrFail($id);
+        
+        if ($user->role !== 'admin' && $complaint->user_id !== $user->id) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
         $complaint->delete();
         return redirect()->back()->with('success', 'Complaint deleted successfully.');
-
     }
+ public function exportPDF(Request $request)
+{
+    $month = (int) $request->get('month', date('n'));
+    $year = (int) $request->get('year', date('Y'));
+    
+    $complaints = Complaint::whereMonth('created_at', $month)
+        ->whereYear('created_at', $year)
+        ->latest()
+        ->get();
+
+    $namaBulan = \Carbon\Carbon::create()->month($month)->isoFormat('MMMM YYYY');
+
+    $pdf = Pdf::loadView('admin.export-pdf', compact('complaints', 'month', 'year', 'namaBulan'));
+    
+    return $pdf->download("Laporan-SAPA-$month-$year.pdf");
+}
+
+public function exportExcel(Request $request)
+{
+    $month = (int) $request->get('month', Carbon::now()->month);
+    $year = (int) $request->get('year', Carbon::now()->year);
+    
+    $namaBulan = Carbon::create()->month($month)->year($year)->isoFormat('MMMM-YYYY');
+    
+    return Excel::download(new ComplaintsExport($month, $year), 'Rekap-SAPA-' . $namaBulan . '.xlsx');
+}
+
 }
