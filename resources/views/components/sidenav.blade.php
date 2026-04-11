@@ -82,10 +82,7 @@
                             <span class="font-bold text-sm">Ekspor Laporan</span>
                         </button>
                         
-                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all">
-                            <i class="fa-solid fa-users-gear w-5 text-center text-sm"></i>
-                            <span class="font-bold text-sm">Manajemen User</span>
-                        </a>
+                       
                     </div>
                 </div>
             @endif

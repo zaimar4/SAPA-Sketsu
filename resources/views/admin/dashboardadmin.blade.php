@@ -12,7 +12,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 w-full">
                 <div class="flex-1 min-w-0">
                     <h2 class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em]">Sistem Informasi SAPA</h2>
-                    <h1 class="text-slate-900 font-black text-xl sm:text-2xl lg:text-3xl mt-1 truncate">Halo, {{ Auth::user()->name }} 👋</h1>
+                    <h1 class="text-slate-900 font-black text-xl sm:text-2xl lg:text-3xl mt-1 truncate">Halo, {{ Auth::user()->name }} </h1>
                 </div>
                 <div class="flex-shrink-0">
                     <a href="{{ route('admin.reports') }}" 
