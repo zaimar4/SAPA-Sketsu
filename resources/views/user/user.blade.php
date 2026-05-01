@@ -4,12 +4,10 @@
 @section('content')
 <x-sidenav></x-sidenav>
 
-{{-- Main wrapper: on mobile no left margin; on lg+ add ml-64 --}}
 <div class="lg:ml-64 min-h-screen bg-slate-50" x-data="{ open: false }" @open-modal.window="open = true">
 
     <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
 
-        {{-- Header --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
                 <h2 class="text-slate-400 font-medium text-xs uppercase tracking-widest">Selamat Datang</h2>
@@ -24,7 +22,6 @@
             </button>
         </div>
 
-        {{-- Modal --}}
         <div x-show="open" x-cloak
             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
             <div @click.away="open = false"
@@ -94,7 +91,6 @@
             </div>
         </div>
 
-        {{-- Stats Cards --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex items-center gap-4">
                 <div class="bg-indigo-50 text-indigo-600 w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-lg">
@@ -137,10 +133,8 @@
             </div>
         </div>
 
-        {{-- Table + Fast Action --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-            {{-- Table --}}
             <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                     <h3 class="font-bold text-slate-800 text-sm">Riwayat Laporan Terakhir</h3>
@@ -206,7 +200,6 @@
                 </div>
             </div>
 
-            {{-- Fast Action --}}
             <div class="lg:col-span-1">
                 <x-fastaction></x-fastaction>
             </div>

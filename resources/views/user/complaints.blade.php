@@ -7,14 +7,12 @@
     <div class="lg:ml-64 min-h-screen bg-[#f8fafc]">
         <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
 
-            {{-- Breadcrumb --}}
             <nav class="flex mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 <span>Dashboard</span>
                 <span class="mx-2">/</span>
                 <span class="text-indigo-600">Riwayat Laporan</span>
             </nav>
 
-            {{-- Page Header --}}
             <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-6 mb-6 gap-4">
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Riwayat Laporan</h1>
@@ -33,12 +31,10 @@
                 </div>
             </div>
 
-            {{-- Filter Form --}}
             <div class="bg-white p-4 border border-slate-200 shadow-sm mb-5 rounded-xl">
                 <form action="{{ route('user.reports-all') }}" method="GET"
                     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
 
-                    {{-- Search --}}
                     <div class="sm:col-span-2 lg:col-span-2">
                         <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Cari Laporan</label>
                         <div class="relative">
@@ -51,7 +47,6 @@
                         </div>
                     </div>
 
-                    {{-- Status --}}
                     <div class="lg:col-span-1">
                         <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Status</label>
                         <select name="status"
@@ -63,7 +58,6 @@
                         </select>
                     </div>
 
-                    {{-- Category --}}
                     <div class="lg:col-span-1">
                         <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Kategori</label>
                         <select name="category"
@@ -77,7 +71,6 @@
                         </select>
                     </div>
 
-                    {{-- Actions --}}
                     <div class="sm:col-span-2 lg:col-span-2 flex items-end gap-2">
                         <button type="submit"
                             class="flex-1 bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
@@ -94,9 +87,7 @@
                 </form>
             </div>
 
-            {{-- Table (desktop) / Cards (mobile) --}}
-
-            {{-- Desktop Table --}}
+           
             <div class="hidden sm:block bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm min-w-[640px]">
@@ -188,7 +179,6 @@
                 @endif
             </div>
 
-            {{-- Mobile Cards --}}
             <div class="sm:hidden space-y-3">
                 @forelse($complaints as $item)
                 <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">

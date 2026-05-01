@@ -19,7 +19,6 @@
         <div class="lg:col-span-2 space-y-4 sm:space-y-6">
             <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
                 
-                <!-- Header Card -->
                 <div class="bg-slate-50/50 px-4 sm:px-8 py-4 sm:py-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-3">
                     <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                         <div class="w-10 h-10 sm:w-10 sm:h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-black border-2 border-white shadow-sm flex-shrink-0">
@@ -38,18 +37,15 @@
                 </div>
 
                 <div class="p-4 sm:p-6 lg:p-8">
-                    <!-- Tanggal -->
                     <div class="flex items-center gap-2 mb-4 text-slate-400">
                         <i class="fa-regular fa-calendar text-xs"></i>
                         <span class="text-xs font-bold italic">{{ $complaint->created_at->translatedFormat('d F Y, H:i') }} WIB</span>
                     </div>
 
-                    <!-- Judul -->
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight mb-4 sm:mb-6 leading-tight">
                         {{ $complaint->title }}
                     </h1>
 
-                    <!-- Deskripsi -->
                     <div class="relative mb-8 sm:mb-10">
                         <div class="absolute left-[-10px] sm:left-[-20px] top-0 bottom-0 w-[2px] sm:w-[3px] bg-indigo-50 rounded-full"></div>
                         <h4 class="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-3">Deskripsi Laporan</h4>
@@ -58,7 +54,6 @@
                         </p>
                     </div>
 
-                    <!-- Lampiran Foto -->
                     <div class="mt-6 sm:mt-8">
                         <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <i class="fa-solid fa-camera"></i> Lampiran Bukti Foto
@@ -84,9 +79,7 @@
             </div>
         </div>
 
-        <!-- Sidebar -->
         <div class="space-y-4 sm:space-y-6">
-            <!-- Status Card -->
             <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
                 <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 sm:mb-5">Status Laporan</h3>
                 
@@ -124,7 +117,6 @@
             </div>
 
          <div class="bg-white rounded-2xl sm:rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5">
-     {{-- Diskusi Laporan (Gaya Bubble Chat) --}}
             <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                     <i class="fa-solid fa-comments text-indigo-500"></i> Diskusi Laporan
@@ -148,7 +140,6 @@
                     @endforelse
                 </div>
 
-                {{-- Form Kirim Pesan (Hanya Admin/Guru di gambar ini, tapi disesuaikan) --}}
                 <form action="{{ route('responses.store') }}" method="POST" class="mt-6 pt-6 border-t border-slate-100">
                     @csrf
                     <input type="hidden" name="complaint_id" value="{{ $complaint->id }}">

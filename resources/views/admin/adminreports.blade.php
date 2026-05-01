@@ -7,14 +7,12 @@
     <div class="lg:ml-64 min-h-screen bg-[#f8fafc]">
         <div class="p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8">
 
-            {{-- Breadcrumb --}}
             <nav class="flex mb-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 <span>Dashboard</span>
                 <span class="mx-2">/</span>
                 <span class="text-indigo-600">Riwayat Laporan</span>
             </nav>
 
-            {{-- Header --}}
             <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-6 mb-6 gap-4">
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Riwayat Laporan</h1>
@@ -33,7 +31,6 @@
                 </div>
             </div>
 
-            {{-- Filter Section --}}
             <div class="bg-white p-4 border border-slate-200 shadow-sm mb-5 rounded-xl">
                 <form action="{{ Auth::user()->role == 'admin' ? route('admin.reports') : route('user.reports-all') }}" method="GET"
                     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -90,7 +87,6 @@
                 </form>
             </div>
 
-            {{-- DESKTOP VIEW (Table) --}}
             <div class="hidden sm:block bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm min-w-[640px]">
@@ -145,7 +141,6 @@
 
                                 <td class="px-5 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        {{-- Dinamis: Jika Admin ke route Admin, Jika User ke route User --}}
                                         <a href="{{ Auth::user()->role == 'admin' ? route('admin.complaints-show', $item->slug) : route('user.complaints-show', $item->slug) }}"
                                             class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-100 shadow-sm bg-white hover:bg-indigo-600 group transition-all">
                                             <i class="fa-regular fa-eye text-indigo-600 group-hover:text-white text-xs transition-colors"></i>
@@ -183,7 +178,6 @@
                 @endif
             </div>
 
-            {{-- MOBILE VIEW (Card) --}}
             <div class="sm:hidden space-y-3">
                 @forelse($complaints as $item)
                 <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
@@ -219,7 +213,6 @@
                         </div>
 
                         <div class="flex items-center gap-2">
-                            {{-- FIX DISINI: Gunakan rute dinamis sesuai Role agar Admin tidak terblokir di Mobile --}}
                             <a href="{{ Auth::user()->role == 'admin' ? route('admin.complaints-show', $item->slug) : route('user.complaints-show', $item->slug) }}"
                                 class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-100 bg-white hover:bg-indigo-600 group transition-all">
                                 <i class="fa-regular fa-eye text-indigo-600 group-hover:text-white text-xs transition-colors"></i>

@@ -8,10 +8,9 @@
     <div class="lg:ml-64 min-h-screen bg-slate-50">
         
         <div class="p-4 sm:p-6 lg:p-8">
-            {{-- Header --}}
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 w-full">
                 <div class="flex-1 min-w-0">
-                    <h2 class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em]">Sistem Informasi SAPA</h2>
+                    <h2 class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em]">Sistem Informasi SAPjA</h2>
                     <h1 class="text-slate-900 font-black text-xl sm:text-2xl lg:text-3xl mt-1 truncate">Halo, {{ Auth::user()->name }} </h1>
                 </div>
                 <div class="flex-shrink-0">
@@ -66,7 +65,6 @@
             </div>
         </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-                {{-- Tabel Laporan --}}
                 <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
                     <div class="px-4 sm:px-6 py-4 sm:py-5 border-b border-slate-100 flex justify-between items-center bg-white">
                         <div>
@@ -98,7 +96,6 @@
                                             <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
                                                 {{ $item->created_at->diffForHumans() }}
                                             </span>
-                                            {{-- Status badge tampil di mobile --}}
                                             <span class="sm:hidden px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest
                                                 @if($item->status == 'pending') bg-amber-50 text-amber-600 border border-amber-100 
                                                 @elseif($item->status == 'process') bg-blue-50 text-blue-600 border border-blue-100
@@ -139,7 +136,6 @@
                     </div>
                 </div>
 
-                {{-- Sidebar --}}
                 <div class="lg:col-span-1 flex flex-col gap-6">
                     <x-fastaction></x-fastaction>
                     
@@ -153,7 +149,6 @@
                 </div>
             </div>
 
-            {{-- Modal Update Status Instan --}}
             <div x-data="{ isModalOpen: false, selectedId: '', selectedStatus: '' }" 
                  @open-modal.window="isModalOpen = true" 
                  class="relative z-[999]">
@@ -226,7 +221,6 @@
                 </div>
             </div>
            
-            {{-- Modal Export --}}
             <div x-data="{ isExportModalOpen: false }" 
                  @open-export-modal.window="isExportModalOpen = true" 
                  class="relative z-[999]">

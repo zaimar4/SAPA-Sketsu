@@ -56,7 +56,6 @@
                         </p>
                     </div>
 
-                    {{-- Lampiran Foto --}}
                     <div>
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                             <i class="fa-solid fa-camera"></i> Lampiran Bukti Foto
@@ -73,9 +72,7 @@
             </div>
         </div>
 
-        {{-- SISI KANAN: STATUS & DISKUSI --}}
         <div class="space-y-6">
-            {{-- Status Laporan --}}
             <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">Status Laporan</h3>
                 
@@ -99,7 +96,6 @@
                 </div>
             </div>
 
-            {{-- Diskusi Laporan (Gaya Bubble Chat) --}}
             <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                     <i class="fa-solid fa-comments text-indigo-500"></i> Diskusi Laporan
@@ -123,7 +119,6 @@
                     @endforelse
                 </div>
 
-                {{-- Form Kirim Pesan (Hanya Admin/Guru di gambar ini, tapi disesuaikan) --}}
                 <form action="{{ route('responses.store') }}" method="POST" class="mt-6 pt-6 border-t border-slate-100">
                     @csrf
                     <input type="hidden" name="complaint_id" value="{{ $complaint->id }}">

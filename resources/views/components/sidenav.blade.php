@@ -1,11 +1,9 @@
 <div x-data="{ sideBarOpen: false }">
-    {{-- Tombol Hamburger Mobile --}}
     <button @click="sideBarOpen = true"
         class="lg:hidden fixed top-4 left-4 z-40 bg-slate-900 text-white p-3 rounded-xl shadow-lg hover:bg-indigo-600 transition-colors">
         <i class="fa-solid fa-bars-staggered"></i>
     </button>
 
-    {{-- Overlay Mobile --}}
     <div x-show="sideBarOpen" 
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0"
@@ -18,11 +16,9 @@
         x-cloak>
     </div>
 
-    {{-- Main Sidebar --}}
     <div :class="sideBarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
         class="w-64 bg-slate-900 text-white h-screen flex flex-col shadow-2xl fixed left-0 top-0 z-[50] transition-transform duration-300 ease-in-out border-r border-slate-800">
 
-        {{-- Logo Section --}}
         <div class="p-6 flex items-center justify-between border-b border-slate-800/50">
             <div class="flex items-center gap-3">
                 <img src="{{ asset('images/logosketsu-removebg-preview.png') }}" alt="Logo Sketsu" class="h-9 w-auto">
@@ -38,9 +34,6 @@
 
         <nav class="flex-1 p-4 space-y-7 overflow-y-auto custom-scrollbar">
             
-            {{-- ========================================== --}}
-            {{-- NAVIGASI ADMIN --}}
-            {{-- ========================================== --}}
             @if (Auth::user()->role == 'admin')
                 <div>
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-3 mb-4">Menu Utama</p>
@@ -72,7 +65,6 @@
                     </div>
                 </div>
 
-                {{-- Fitur Tambahan Admin --}}
                 <div>
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-3 mb-4">Layanan Data</p>
                     <div class="space-y-1">
@@ -87,9 +79,6 @@
                 </div>
             @endif
 
-            {{-- ========================================== --}}
-            {{-- NAVIGASI USER (SISWA) --}}
-            {{-- ========================================== --}}
             @if (Auth::user()->role == 'user')
                 <div>
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-3 mb-4">Menu Utama</p>
@@ -113,7 +102,6 @@
 
         </nav>
 
-        {{-- Profile & Logout Section --}}
         <div class="p-4 bg-slate-900/50 border-t border-slate-800/50 backdrop-blur-md">
             <div class="flex items-center gap-3 px-3 mb-5 group cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 group-hover:rotate-6 transition-transform flex-shrink-0">
@@ -137,7 +125,6 @@
 </div>
 
 <style>
-    /* Agar sidebar bisa di-scroll tapi scrollbar-nya tipis dan keren */
     .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }

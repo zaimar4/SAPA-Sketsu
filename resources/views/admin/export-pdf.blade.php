@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekap Laporan SAPA - {{ $month }}/{{ $year }}</title>
     <style>
-        /* Konfigurasi Dasar */
         @page { margin: 1cm; }
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
@@ -15,7 +14,6 @@
             padding: 0;
         }
 
-        /* Header Laporan */
         .header {
             text-align: center;
             border-bottom: 2px solid #e2e8f0;
@@ -36,7 +34,6 @@
             font-weight: bold;
         }
 
-        /* Info Periode */
         .info-box {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -49,7 +46,6 @@
             font-size: 11px;
         }
 
-        /* Style Tabel Utama */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -74,7 +70,6 @@
             background-color: #fdfdfd;
         }
 
-        /* Status Badge Style */
         .badge {
             padding: 4px 8px;
             border-radius: 6px;
@@ -87,7 +82,6 @@
         .bg-resolved { background-color: #dcfce7; color: #166534; }
         .bg-rejected { background-color: #fee2e2; color: #991b1b; }
 
-        /* Footer */
         .footer {
             position: fixed;
             bottom: 0;
