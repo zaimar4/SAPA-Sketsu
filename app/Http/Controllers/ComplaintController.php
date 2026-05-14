@@ -97,7 +97,7 @@ class ComplaintController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'evidence_photo' => 'nullable|image|max:2048',
+            'evidence_photo' => 'nullable|image|max:5048',
             'category' => 'required|in:bullying,facilities,suggestion',
         ]);
 
