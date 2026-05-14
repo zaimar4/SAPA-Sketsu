@@ -60,7 +60,7 @@
                         </h4>
                         @if($complaint->evidence_photo)
                             <div class="group relative rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-inner">
-                                <img src="{{ asset('images/' . $complaint->evidence_photo) }}" 
+                                <img src="{{ $complaint->evidence_photo }}" 
                                      class="w-full h-auto object-cover max-h-[400px] sm:max-h-[500px] lg:max-h-[600px] transform group-hover:scale-[1.02] transition-transform duration-700">
                                 <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <span class="bg-white/90 backdrop-blur-sm text-slate-900 text-[10px] font-black tracking-widest uppercase px-3 sm:px-4 py-2 rounded-full shadow-lg">

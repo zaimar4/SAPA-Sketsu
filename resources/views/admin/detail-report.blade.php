@@ -62,7 +62,7 @@
                         </p>
                         <div class="rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/50 p-4 min-h-[200px] flex items-center justify-center">
                             @if($complaint->evidence_photo)
-                                <img src="{{ asset('images/' . $complaint->evidence_photo) }}" class="max-h-[400px] rounded-xl shadow-md">
+                                <img src="{{ $complaint->evidence_photo }}" class="max-h-[400px] rounded-xl shadow-md">
                             @else
                                 <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Tidak ada lampiran foto</p>
                             @endif

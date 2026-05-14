@@ -10,6 +10,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Exports\ComplaintsExport;
+use Illuminate\Support\Facades\Http as FacadesHttp;
+use League\Uri\Http;
 
 class ComplaintController extends Controller
 {
@@ -99,12 +101,12 @@ class ComplaintController extends Controller
             'category' => 'required|in:bullying,facilities,suggestion',
         ]);
 
-        $filename = null;
-        if($request->hasFile('evidence_photo')){
-            $file = $request->file('evidence_photo');
-            $filename = time() . '.' . $file->extension();
-            $file->move(public_path('images'), $filename);
-        }
+        $imageUrl = null;
+
+            if ($request->hasFile('evidence_photo')) {
+                $file = $request->file('evidence_photo');
+                $imageUrl = $this->uploadToSufy($file);
+            }
 
         $initials = [
             'bullying' => 'BLY',
@@ -120,7 +122,7 @@ class ComplaintController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'evidence_photo' => $filename,
+            'evidence_photo' => $imageUrl,
             'is_anonymous' => $request->has('is_anonymous'),
             'status' => 'pending',
             'ticket_number' => $ticketNumber,
@@ -202,4 +204,27 @@ public function exportExcel(Request $request)
     return Excel::download(new ComplaintsExport($month, $year), 'Rekap-SAPA-' . $namaBulan . '.xlsx');
 }
 
+private function uploadToSufy($file)
+{
+    $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+
+    $response = FacadesHttp::withHeaders([
+        'Authorization' => 'Bearer ' . env('SUVY_API_SECRET'),
+    ])->attach(
+        'file',
+        file_get_contents($file),
+        $fileName
+    )->post('https://idoxf6f.sufydely.com/api/storage/upload', [
+        'bucket' => 'evidence'
+    ]);
+
+    if ($response->successful()) {
+
+        $data = $response->json();
+
+        return $data['url'] ?? $data['data']['url'] ?? null;
+    }
+
+    throw new \Exception('Upload ke Sufy gagal: ' . $response->body());
+}
 }
