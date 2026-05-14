@@ -55,7 +55,7 @@ return [
             'bucket' => env('SUVY_BUCKET'),
             'url' => env('SUVY_URL'),
             'endpoint' => env('SUVY_ENDPOINT'),
-            'use_path_style_endpoint' => 'true',
+            'use_path_style_endpoint' => true,
             'throw' => false,
             'report' => false,
         ],
