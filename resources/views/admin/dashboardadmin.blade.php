@@ -115,10 +115,10 @@
                                         </span>
                                     </td>
                                     <td class="px-4 sm:px-6 py-4 sm:py-5 text-right">
-                                        <a href="{{ route('admin.reports', $item->id) }}" 
+                                        < href="{{ route('admin.reports', $item->id) }}" 
                                            class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 text-slate-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
                                             <i class="fa-solid fa-chevron-right text-xs"></i>
-                                        </a>
+                                    </a>
                                     </td>
                                 </tr>
                                 @empty

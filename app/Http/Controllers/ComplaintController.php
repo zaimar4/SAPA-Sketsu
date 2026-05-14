@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Exports\ComplaintsExport;
 use Illuminate\Support\Facades\Http as FacadesHttp;
+use Illuminate\Support\Facades\Storage;
 use League\Uri\Http;
 
 class ComplaintController extends Controller
@@ -207,21 +208,17 @@ private function uploadToSufy($file)
 {
     $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
     
-    $response = FacadesHttp::withHeaders([
-        'Authorization' => 'Bearer ' . env('SUVY_API_SECRET'), 
-    ])->attach(
-        'file',                       
-        file_get_contents($file),      
-        $fileName                     
-    )->post('https://idoxf6f.sufydely.com/api/storage/upload', [
-        'bucket' => 'evidence'        
-    ]);
+    $path =Storage::disk('s3')->putFileAs(
+        '',            
+        $file,         
+        $fileName,     
+        'public'       
+    );
 
-    if ($response->successful()) {
-        $data = $response->json();
-        return $data['url'] ?? $data['data']['url'] ?? null;
+    if ($path) {
+       return config('filesystems.disks.s3.url') . '/' . $fileName;
     }
 
-    throw new \Exception('Upload gagal: ' . $response->body());
+    throw new \Exception('Upload ke Sufy gagal menggunakan Driver S3.');
 }
 }
