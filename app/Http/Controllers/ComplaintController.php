@@ -214,16 +214,10 @@ private function uploadToSupabase($file)
     $supabaseKey = env('SUPABASE_API_SECRET');
     $bucket = env('SUPABASE_BUCKET');
 
-      dd([
-        'url' => $supabaseUrl,
-        'key_prefix' => substr($supabaseKey, 0, 30),
-        'bucket' => $bucket,
-    ]);
 
     $response = \Illuminate\Support\Facades\Http::withHeaders([
-        'Authorization' => 'Bearer ' . $supabaseKey,
-        'Content-Type' => $mimeType,
-        'x-upsert' => 'true',
+          'Authorization' => 'Bearer ' . $supabaseKey,
+            'apiKey' => $supabaseKey,
     ])->withBody($fileContent, $mimeType)
       ->post("{$supabaseUrl}/storage/v1/object/{$bucket}/{$fileName}");
 
