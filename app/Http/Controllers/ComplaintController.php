@@ -206,10 +206,11 @@ public function exportExcel(Request $request)
 }
 private function uploadToSufy($file)
 {
+    dd(env('SUVY_BUCKET'), config('filesystems.disks.s3.bucket'));
     $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
     
     $path =Storage::disk('s3')->putFileAs(
-        '',            
+        '/',            
         $file,         
         $fileName,     
         'public'       
