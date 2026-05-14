@@ -218,8 +218,13 @@ private function uploadToSupabase($file)
     $response = \Illuminate\Support\Facades\Http::withHeaders([
           'Authorization' => 'Bearer ' . $supabaseKey,
             'apiKey' => $supabaseKey,
-    ])->withBody($fileContent, $mimeType)
-      ->post("{$supabaseUrl}/storage/v1/object/{$bucket}/{$fileName}");
+    ])->attach(
+        'file',
+        $fileContent,
+        $fileName
+    )->post(
+        $supabaseUrl . '/storage/v1/object/' . $bucket . '/' . $fileName
+    );
 
     if ($response->successful()) {
         return "{$supabaseUrl}/storage/v1/object/public/{$bucket}/{$fileName}";
