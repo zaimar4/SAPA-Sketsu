@@ -106,7 +106,7 @@ class ComplaintController extends Controller
 
             if ($request->hasFile('evidence_photo')) {
                 $file = $request->file('evidence_photo');
-                $imageUrl = $this->uploadToSufy($file);
+                $imageUrl = $this->uploadToSupabase($file);
             }
 
         $initials = [
@@ -204,22 +204,27 @@ public function exportExcel(Request $request)
     
     return Excel::download(new ComplaintsExport($month, $year), 'Rekap-SAPA-' . $namaBulan . '.xlsx');
 }
-private function uploadToSufy($file)
+private function uploadToSupabase($file)
 {
-    dd(env('SUVY_BUCKET'), config('filesystems.disks.s3.bucket'));
     $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-    
-    $path =Storage::disk('s3')->putFileAs(
-        '/',            
-        $file,         
-        $fileName,     
-        'public'       
-    );
+    $fileContent = file_get_contents($file->getRealPath());
+    $mimeType = $file->getMimeType();
 
-    if ($path) {
-       return config('filesystems.disks.s3.url') . '/' . $fileName;
+    $supabaseUrl = env('SUPABASE_URL');
+    $supabaseKey = env('SUPABASE_API_SECRET');
+    $bucket = env('SUPABASE_BUCKET');
+
+    $response = \Illuminate\Support\Facades\Http::withHeaders([
+        'Authorization' => 'Bearer ' . $supabaseKey,
+        'Content-Type' => $mimeType,
+        'x-upsert' => 'true',
+    ])->withBody($fileContent, $mimeType)
+      ->post("{$supabaseUrl}/storage/v1/object/{$bucket}/{$fileName}");
+
+    if ($response->successful()) {
+        return "{$supabaseUrl}/storage/v1/object/public/{$bucket}/{$fileName}";
     }
 
-    throw new \Exception('Upload ke Sufy gagal menggunakan Driver S3.');
+    throw new \Exception('Upload ke Supabase gagal: ' . $response->body());
 }
 }
