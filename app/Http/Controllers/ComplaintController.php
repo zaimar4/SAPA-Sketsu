@@ -217,6 +217,13 @@ private function uploadToSufy($file)
     )->post('https://idoxf6f.sufydely.com/api/storage/upload', [
         'bucket' => 'evidence'
     ]);
+    if (!$response->successful()) {
+    dd([
+        'status' => $response->status(),
+        'body' => $response->body(),
+        'headers' => $response->headers()
+    ]);
+}
 
     if ($response->successful()) {
 
