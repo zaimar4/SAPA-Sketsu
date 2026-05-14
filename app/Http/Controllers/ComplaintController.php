@@ -203,30 +203,25 @@ public function exportExcel(Request $request)
     
     return Excel::download(new ComplaintsExport($month, $year), 'Rekap-SAPA-' . $namaBulan . '.xlsx');
 }
-
 private function uploadToSufy($file)
 {
     $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
     
-    $response = FacadesHttp::get('https://idoxf6f.sufydely.com');
-    dd($response->status(), $response->body());
     $response = FacadesHttp::withHeaders([
-        'Authorization' => 'Bearer ' . env('SUVY_API_SECRET'),
+        'Authorization' => 'Bearer ' . env('SUVY_API_SECRET'), 
     ])->attach(
-        'file',
-        file_get_contents($file),
-        $fileName
+        'file',                       
+        file_get_contents($file),      
+        $fileName                     
     )->post('https://idoxf6f.sufydely.com/api/storage/upload', [
-        'bucket' => 'evidence'
+        'bucket' => 'evidence'        
     ]);
 
     if ($response->successful()) {
-
         $data = $response->json();
-
         return $data['url'] ?? $data['data']['url'] ?? null;
     }
 
-    throw new \Exception('Upload ke Sufy gagal: ' . $response->body());
+    throw new \Exception('Upload gagal: ' . $response->body());
 }
 }
