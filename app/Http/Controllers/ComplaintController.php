@@ -207,7 +207,9 @@ public function exportExcel(Request $request)
 private function uploadToSufy($file)
 {
     $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-
+    
+    $response = FacadesHttp::get('https://idoxf6f.sufydely.com');
+    dd($response->status(), $response->body());
     $response = FacadesHttp::withHeaders([
         'Authorization' => 'Bearer ' . env('SUVY_API_SECRET'),
     ])->attach(
@@ -217,13 +219,6 @@ private function uploadToSufy($file)
     )->post('https://idoxf6f.sufydely.com/api/storage/upload', [
         'bucket' => 'evidence'
     ]);
-    if (!$response->successful()) {
-    dd([
-        'status' => $response->status(),
-        'body' => $response->body(),
-        'headers' => $response->headers()
-    ]);
-}
 
     if ($response->successful()) {
 
